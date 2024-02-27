@@ -57,7 +57,7 @@ function App() {
       Unsubscribes a subscribed user from push notifications
     */
   const unsubscribeUser = async () => {
-    navigator.serviceWorker.ready.then((reg) => {
+    navigator.serviceWorker.ready.then(() => {
       // makes sure the service worker is active
       if (sub) {
         sub
@@ -93,7 +93,7 @@ function App() {
     Sends 5 push notifications
   */
   const setNotificationsRegularly = async () => {
-    const sleep = (delay) =>
+    const sleep = (delay: number) =>
       new Promise((resolve) => setTimeout(resolve, delay));
     // setRegular(true);
     while (5) {
