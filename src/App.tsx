@@ -12,8 +12,8 @@ import axios from "axios";
 import { useState } from "react";
 
 function App() {
-  const [reg, setReg] = useState(null);
-  const [sub, setSub] = useState(null);
+  const [reg, setReg] = useState<ServiceWorkerRegistration | null>(null);
+  const [sub, setSub] = useState<PushSubscription | null>(null);
   const [routeText, setRouteText] = useState("");
   const [registrationText, setRegistrationText] = useState("");
   const [subscribed, setSubscribed] = useState(false);
@@ -44,12 +44,12 @@ function App() {
     right now, just happens when the user presses the button
   */
   const subscribeUser = async () => {
-    const subscription = await reg.pushManager.subscribe({
+    const subscription = await reg?.pushManager.subscribe({
       userVisibleOnly: true,
       applicationServerKey: publicVapidKey,
     });
     console.log("Successfully Subscribed");
-    setSub(subscription);
+    setSub(subscription || null);
     setSubscribed(true);
   };
 
@@ -59,7 +59,7 @@ function App() {
   const unsubscribeUser = async () => {
     navigator.serviceWorker.ready.then((reg) => {
       // makes sure the service worker is active
-      reg.pushManager.getSubscription().then(() => {
+      if (sub) {
         sub
           .unsubscribe()
           .then(() => {
@@ -72,7 +72,7 @@ function App() {
               "Unsubscribing Failed, perhaps you did not subscribe yet?"
             );
           });
-      });
+      }
     });
   };
 
